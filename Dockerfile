@@ -1,10 +1,10 @@
-# Multi-stage Dockerfile for Spring Boot E-Commerce Application
+# Multi-stage Dockerfile for Spring Boot E-Commerce Application (Root Monorepo)
 # Stage 1: Build stage
 FROM maven:3.9-eclipse-temurin-21-alpine AS builder
 WORKDIR /app
-COPY pom.xml .
+COPY ecommerceapp/pom.xml .
 RUN mvn dependency:go-offline -B
-COPY src ./src
+COPY ecommerceapp/src ./src
 RUN mvn clean package -DskipTests
 
 # Stage 2: Production runtime stage

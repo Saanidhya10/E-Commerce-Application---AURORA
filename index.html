@@ -3,14 +3,409 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>TechMart Electronics | Production E-Commerce Application</title>
+    <meta name="description" content="Production-grade electronics e-commerce store built with Spring Boot, JPA, MySQL, and modern clean HTML/CSS/JS.">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <nav>
-        <h1>Logo</h1>
-    </nav>
-    <div class="container">
-        This is a container.
+
+    <!-- 1. Announcement Bar -->
+    <div class="top-bar">
+        <div class="top-bar-container">
+            <div>🚚 Free express shipping on all orders over $50 | 24/7 Tech Support</div>
+            <div class="top-bar-links">
+                <a href="#" onclick="EComApp.showToast('Track Order feature: Enter Order # in search', 'info')">Track Order</a>
+                <a href="#">Support</a>
+                <a href="#">Currency: USD ($)</a>
+            </div>
+        </div>
     </div>
+
+    <!-- 2. Main Header -->
+    <header class="main-header">
+        <div class="header-container">
+            <a href="index.html" class="brand-logo">
+                TechMart <span class="badge">PRO</span>
+            </a>
+
+            <!-- Search Bar with Category Select -->
+            <div class="search-box">
+                <select id="searchCategorySelect">
+                    <option value="">All Categories</option>
+                </select>
+                <input type="text" id="headerSearchInput" placeholder="Search laptops, smartphones, audio gear, smartwatches..." />
+                <button id="headerSearchBtn">
+                    🔍 Search
+                </button>
+            </div>
+
+            <!-- Header Actions -->
+            <div class="header-actions">
+                <button class="header-action-btn" id="userAccountBtn">
+                    👤 <span id="userAccountText">Account</span>
+                </button>
+                <button class="header-action-btn cart-btn" id="headerCartBtn">
+                    🛒 Cart <span class="cart-badge" id="cartBadgeCount">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 3. Sub Navigation Bar -->
+    <nav class="sub-nav">
+        <div class="nav-container">
+            <ul class="nav-menu" id="categoryNavMenu">
+                <!-- Populated dynamically by app.js -->
+            </ul>
+            <div style="display:flex; align-items:center; gap: 12px;">
+                <a href="#" id="adminPanelNavLink" style="display:none; font-size:12px; font-weight:700; color:var(--primary-blue); background:#eff6ff; padding:4px 10px; border-radius:4px; border:1px solid #bfdbfe;">
+                    ⚙️ Admin Panel
+                </a>
+                <div id="apiStatusBadge" class="status-badge">
+                    <span class="status-dot"></span> Checking API...
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 4. Main Page Container -->
+    <main class="page-container">
+
+        <!-- Hero Banner -->
+        <section class="hero-banner">
+            <div class="hero-content">
+                <span class="hero-tag">FEATURED ELECTRONICS SALE</span>
+                <h2>Next-Gen Tech & Premium Audio</h2>
+                <p>Discover flagship laptops, smartphones, noise-canceling headphones, and wearables with verified warranty and fast express shipping.</p>
+                <button class="btn-primary" onclick="window.scrollTo({top: 450, behavior: 'smooth'})">Shop All Products</button>
+            </div>
+        </section>
+
+        <!-- Categories Section -->
+        <section style="margin-bottom: 24px;">
+            <div class="section-header">
+                <h3 class="section-title">Shop by Category</h3>
+            </div>
+            <div class="categories-grid" id="categoriesGrid">
+                <!-- Rendered dynamically -->
+            </div>
+        </section>
+
+        <!-- Catalog Section (Filter Sidebar + Products Grid) -->
+        <section class="catalog-layout">
+
+            <!-- Sidebar Filters -->
+            <aside class="filter-sidebar">
+                <div class="filter-group">
+                    <h4 class="filter-title">Price Range</h4>
+                    <div class="price-slider-group">
+                        <input type="range" id="priceRangeInput" min="0" max="2000" step="50" value="2000" style="width:100%; accent-color: var(--primary-blue);" />
+                        <div style="display:flex; justify-content:space-between; font-size:12px; color: var(--text-muted);">
+                            <span>$0</span>
+                            <span id="priceRangeVal" style="font-weight:700; color:var(--primary-blue);">$2000</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <h4 class="filter-title">Availability</h4>
+                    <div class="filter-options">
+                        <label class="filter-option">
+                            <input type="checkbox" checked id="inStockCheckbox" onchange="EComApp.applyFilters()" /> In Stock Only
+                        </label>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <h4 class="filter-title">Brand</h4>
+                    <div class="filter-options">
+                        <label class="filter-option"><input type="checkbox" checked /> TechPro</label>
+                        <label class="filter-option"><input type="checkbox" checked /> NovaTech</label>
+                        <label class="filter-option"><input type="checkbox" checked /> AcousticLab</label>
+                        <label class="filter-option"><input type="checkbox" checked /> PulseGear</label>
+                    </div>
+                </div>
+
+                <button class="btn-secondary" style="width:100%; margin-top: 10px;" onclick="EComApp.resetFilters()">
+                    Reset Filters
+                </button>
+            </aside>
+
+            <!-- Product Grid Area -->
+            <div class="catalog-content">
+                <div class="catalog-toolbar">
+                    <span class="result-count" id="resultCount">Loading products...</span>
+                    <div class="sort-select-wrapper">
+                        <label for="sortProductsSelect">Sort By:</label>
+                        <select id="sortProductsSelect">
+                            <option value="featured">Featured</option>
+                            <option value="price-low">Price: Low to High</option>
+                            <option value="price-high">Price: High to Low</option>
+                            <option value="rating">Customer Rating</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="products-grid" id="productsGrid">
+                    <!-- Product cards rendered dynamically by app.js -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 5. Quick View Modal -->
+    <div class="modal-overlay" id="quickViewModal">
+        <div class="modal-container large">
+            <div class="modal-header">
+                <h3>Product Specifications</h3>
+                <button class="close-btn" onclick="EComApp.closeModal('quickViewModal')">&times;</button>
+            </div>
+            <div class="modal-body" id="quickViewModalBody">
+                <!-- Content injected dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. Cart Drawer / Modal -->
+    <div class="modal-overlay" id="cartModal">
+        <div class="modal-container large">
+            <div class="modal-header">
+                <h3>Shopping Cart</h3>
+                <button class="close-btn" onclick="EComApp.closeModal('cartModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <table class="cart-table">
+                    <thead>
+                        <tr>
+                            <th>Item Details</th>
+                            <th>Unit Price</th>
+                            <th>Quantity</th>
+                            <th>Subtotal</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cartTableBody">
+                        <!-- Rendered by app.js -->
+                    </tbody>
+                </table>
+
+                <div class="cart-summary-box">
+                    <div class="summary-row">
+                        <span>Items Subtotal:</span>
+                        <strong id="cartSubtotal">$0.00</strong>
+                    </div>
+                    <div class="summary-row">
+                        <span>Estimated Shipping:</span>
+                        <span>Free over $50</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Estimated Tax (8%):</span>
+                        <span id="cartTax">$0.00</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Order Total:</span>
+                        <strong id="cartTotal" style="color:var(--primary-blue);">$0.00</strong>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="EComApp.closeModal('cartModal')">Continue Shopping</button>
+                <button class="btn-primary" id="proceedCheckoutBtn">Proceed to Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 7. Checkout Modal -->
+    <div class="modal-overlay" id="checkoutModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3>Complete Order Checkout</h3>
+                <button class="close-btn" onclick="EComApp.closeModal('checkoutModal')">&times;</button>
+            </div>
+            <form id="checkoutForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">Full Shipping Address</label>
+                        <textarea class="form-control" id="checkoutAddress" rows="3" required>742 Evergreen Terrace, Suite 100, Springfield, IL 62704</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Payment Method</label>
+                        <select class="form-control" id="checkoutPayment" required>
+                            <option value="Credit Card (Visa ending in 4242)">Credit Card (Visa / Mastercard)</option>
+                            <option value="UPI / Instant Direct Pay">UPI / Instant Bank Transfer</option>
+                            <option value="Cash on Delivery (COD)">Cash on Delivery (COD)</option>
+                        </select>
+                    </div>
+
+                    <div style="background:#f8fafc; border:1px solid var(--border-color); padding:12px; border-radius:6px; font-size:12px; color:var(--text-secondary);">
+                        🔒 Secure 256-bit encrypted checkout. Your order will be immediately recorded in Spring Boot backend database.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" onclick="EComApp.closeModal('checkoutModal')">Cancel</button>
+                    <button type="submit" class="btn-primary">Place Order Now</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 8. Auth Modal (Login / Register) -->
+    <div class="modal-overlay" id="authModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3>Customer Account Login</h3>
+                <button class="close-btn" onclick="EComApp.closeModal('authModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="tab-buttons">
+                    <button class="tab-btn active">Customer / Admin Sign In</button>
+                </div>
+
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" class="form-control" id="loginEmail" value="john@example.com" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <input type="password" class="form-control" id="loginPassword" value="password123" required />
+                    </div>
+
+                    <div style="font-size:12px; background:#eff6ff; padding:10px; border-radius:4px; margin-bottom:14px; color:#1e40af;">
+                        <strong>Demo Accounts:</strong><br/>
+                        • Customer: <code>john@example.com</code> / <code>password123</code><br/>
+                        • Admin: <code>admin@techmart.com</code> / <code>admin123</code>
+                    </div>
+
+                    <button type="submit" class="btn-primary" style="width:100%;">Sign In</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 9. Admin Product Management Modal -->
+    <div class="modal-overlay" id="adminModal">
+        <div class="modal-container large">
+            <div class="modal-header">
+                <h3>Admin Console - Product Catalog Management</h3>
+                <button class="close-btn" onclick="EComApp.closeModal('adminModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="adminProductForm" style="background:#f8fafc; border:1px solid var(--border-color); padding:16px; border-radius:6px; margin-bottom:20px;">
+                    <h4 style="margin-bottom:12px;">Add / Edit Product</h4>
+                    <input type="hidden" id="adminProductId" />
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Product Name</label>
+                            <input type="text" class="form-control" id="adminProductName" required />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Brand</label>
+                            <input type="text" class="form-control" id="adminProductBrand" required />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Price ($)</label>
+                            <input type="number" step="0.01" class="form-control" id="adminProductPrice" required />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Old Price ($)</label>
+                            <input type="number" step="0.01" class="form-control" id="adminProductOldPrice" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Stock Qty</label>
+                            <input type="number" class="form-control" id="adminProductStock" required />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Category</label>
+                            <select class="form-control" id="adminProductCategory" required>
+                                <option value="1">Laptops & Computers</option>
+                                <option value="2">Smartphones & Tablets</option>
+                                <option value="3">Audio & Headphones</option>
+                                <option value="4">Wearables & Smartwatches</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Image Path / URL</label>
+                        <input type="text" class="form-control" id="adminProductImage" value="img/laptop.png" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-control" id="adminProductDesc" rows="2"></textarea>
+                    </div>
+                    <div style="display:flex; gap:10px;">
+                        <button type="submit" class="btn-primary">Save Product</button>
+                        <button type="button" class="btn-secondary" onclick="EComApp.resetAdminForm()">Clear Form</button>
+                    </div>
+                </form>
+
+                <h4>Current Product Inventory</h4>
+                <table class="cart-table" style="margin-top:10px;">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Brand</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminProductsList">
+                        <!-- Populated by app.js -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- 10. Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-col">
+                <h4>TechMart Electronics</h4>
+                <p>Real-world full-stack e-commerce project built using Spring Boot, Java, JPA/Hibernate, MySQL, and REST APIs.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Shop Categories</h4>
+                <ul>
+                    <li><a href="#">Laptops & Computers</a></li>
+                    <li><a href="#">Smartphones & Tablets</a></li>
+                    <li><a href="#">Audio & Headphones</a></li>
+                    <li><a href="#">Wearables & Smartwatches</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Customer Service</h4>
+                <ul>
+                    <li><a href="#">Track Order</a></li>
+                    <li><a href="#">Returns & Warranty</a></li>
+                    <li><a href="#">Shipping Policy</a></li>
+                    <li><a href="#">API Documentation</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Technology Stack</h4>
+                <ul>
+                    <li>Backend: Spring Boot 3.2 (Java 17)</li>
+                    <li>ORM: JPA / Hibernate</li>
+                    <li>Database: MySQL / Relational DB</li>
+                    <li>REST API & Postman Ready</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 TechMart Electronics. All rights reserved. Built for production interview demonstration.
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
 </body>
 </html>

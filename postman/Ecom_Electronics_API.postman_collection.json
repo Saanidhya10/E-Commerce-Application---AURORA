@@ -1,0 +1,339 @@
+{
+	"info": {
+		"_postman_id": "8a7f9b21-4c12-4d2b-9e8a-7e6d5c4b3a2f",
+		"name": "Ecom Electronics REST API",
+		"description": "Production REST API Collection for TechMart E-Commerce built with Spring Boot, JPA/Hibernate, and MySQL.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "01 - Authentication",
+			"item": [
+				{
+					"name": "Register User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"fullName\": \"Jane Doe\",\n  \"email\": \"jane.doe@example.com\",\n  \"password\": \"secret123\",\n  \"phone\": \"+1-555-9876\",\n  \"address\": \"456 Innovation Way, Austin, TX\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/auth/register",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "auth", "register"]
+						}
+					}
+				},
+				{
+					"name": "Login User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"john@example.com\",\n  \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/auth/login",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "auth", "login"]
+						}
+					}
+				},
+				{
+					"name": "Get User Profile",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/auth/me/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "auth", "me", "1"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "02 - Categories",
+			"item": [
+				{
+					"name": "Get All Categories",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/categories",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "categories"]
+						}
+					}
+				},
+				{
+					"name": "Create Category",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Smart Home & IoT\",\n  \"slug\": \"smart-home-iot\",\n  \"description\": \"Smart plugs, cameras, hub controllers and home automation\",\n  \"imageUrl\": \"img/smarthome.png\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/categories",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "categories"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "03 - Products",
+			"item": [
+				{
+					"name": "Get All Products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/products",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "products"]
+						}
+					}
+				},
+				{
+					"name": "Search & Filter Products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/products/search?query=Pro&categoryId=1&minPrice=100&maxPrice=1500",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "products", "search"],
+							"query": [
+								{ "key": "query", "value": "Pro" },
+								{ "key": "categoryId", "value": "1" },
+								{ "key": "minPrice", "value": "100" },
+								{ "key": "maxPrice", "value": "1500" }
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Product By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/products/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "products", "1"]
+						}
+					}
+				},
+				{
+					"name": "Create Product",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"4K Smart Gaming Monitor 27\\\"\",\n  \"brand\": \"TechPro\",\n  \"description\": \"144Hz IPS display, 1ms response time, HDR400, G-Sync compatible\",\n  \"price\": 399.99,\n  \"oldPrice\": 499.99,\n  \"stockQuantity\": 15,\n  \"featured\": true,\n  \"imageUrl\": \"img/laptop.png\",\n  \"categoryId\": 1\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/products",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "products"]
+						}
+					}
+				},
+				{
+					"name": "Update Product",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"UltraBook Pro 15 Laptop (2026 Edition)\",\n  \"brand\": \"TechPro\",\n  \"description\": \"Updated with Intel Core i9 processor and 32GB DDR5 RAM.\",\n  \"price\": 1399.99,\n  \"oldPrice\": 1599.99,\n  \"stockQuantity\": 20,\n  \"featured\": true,\n  \"imageUrl\": \"img/laptop.png\",\n  \"categoryId\": 1\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/products/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "products", "1"]
+						}
+					}
+				},
+				{
+					"name": "Delete Product",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/products/8",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "products", "8"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "04 - Cart Operations",
+			"item": [
+				{
+					"name": "Get User Cart",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/cart/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "cart", "1"]
+						}
+					}
+				},
+				{
+					"name": "Add Item to Cart",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/cart/1/add?productId=1&quantity=1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "cart", "1", "add"],
+							"query": [
+								{ "key": "productId", "value": "1" },
+								{ "key": "quantity", "value": "1" }
+							]
+						}
+					}
+				},
+				{
+					"name": "Update Cart Item Quantity",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/cart/1/items/1?quantity=2",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "cart", "1", "items", "1"],
+							"query": [
+								{ "key": "quantity", "value": "2" }
+							]
+						}
+					}
+				},
+				{
+					"name": "Remove Item from Cart",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/cart/1/items/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "cart", "1", "items", "1"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "05 - Orders",
+			"item": [
+				{
+					"name": "Create Order",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userId\": 1,\n  \"shippingAddress\": \"123 Tech Park Way, Suite 400, San Francisco, CA\",\n  \"paymentMethod\": \"Credit Card (Visa ending in 4242)\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/orders",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "orders"]
+						}
+					}
+				},
+				{
+					"name": "Get User Orders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/orders/user/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "orders", "user", "1"]
+						}
+					}
+				},
+				{
+					"name": "Get Order By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/orders/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "orders", "1"]
+						}
+					}
+				},
+				{
+					"name": "Update Order Status (Admin)",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/orders/1/status?status=SHIPPED",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "orders", "1", "status"],
+							"query": [
+								{ "key": "status", "value": "SHIPPED" }
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "06 - Admin",
+			"item": [
+				{
+					"name": "Get Dashboard Metrics",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/admin/dashboard",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "admin", "dashboard"]
+						}
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080",
+			"type": "string"
+		}
+	]
+}
